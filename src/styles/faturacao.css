@@ -1,0 +1,46 @@
+.container-card-months {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
+  margin-left: 20px;
+}
+
+.card-months {
+  width: 140px;
+  height: 70px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  margin-right: 40px;
+  margin-bottom: 30px;
+}
+
+.card-first-item {
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.card-months > span:nth-child(2) {
+  text-align: center;
+  color: #d5a368;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.card-months > .card-first-item > span:nth-child(1) {
+  align-self: flex-end;
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card-months > .card-first-item > i {
+  font-size: 18px;
+  color: #d5a368;
+  margin-left: 10px;
+}
