@@ -19,8 +19,6 @@ const App = () => {
           <Login
             userData={(e) => {
               if (!e) return
-              //setUser(e)
-
               setTimeout(() => {
                 window.location.href = window.location.href + 'faturar'
               }, 2000)

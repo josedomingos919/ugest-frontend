@@ -1,13 +1,8 @@
 import React, { memo, useEffect, useState } from 'react'
-
 import { BrowserRouter, Route } from 'react-router-dom'
-
 import Header from './components/layout/header'
-
 import Loader from './components/layout/loader'
-
 import { UseUgest } from './components/view/context'
-
 import Aside from './components/layout/aside'
 
 function Admin() {

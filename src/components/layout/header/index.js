@@ -1,24 +1,13 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo } from 'react'
 
 import { Link } from 'react-router-dom'
-
 import Logo from '../../../assets/images/logo.png'
-
 import Avatar from '../../../assets/images/avatar.png'
-
 import { UseUgest } from '../../view/context'
 
 function Header() {
-  const [mode, setLang] = useState({
-    mode: false,
-  })
   const { shopping, preference, setPreference, setNavigation } = UseUgest()
-
-  useEffect(() => {
-    setLang({
-      mode: preference?.mode,
-    })
-  }, [preference?.mode])
+  const { mode = false } = preference || {}
 
   return (
     <header>
@@ -30,12 +19,17 @@ function Header() {
         <div>
           <button
             onClick={() => {
-              setLang(!mode)
-              setPreference({
+              const newPreference = {
                 ...preference,
-                mode,
-              })
-              localStorage.setItem('UserPreference', JSON.stringify(mode))
+                mode: !mode,
+              }
+
+              setPreference(newPreference)
+
+              localStorage.setItem(
+                'UserPreference',
+                JSON.stringify(newPreference),
+              )
             }}
             className="btn-location"
           >
@@ -60,6 +54,7 @@ function Header() {
               </label>
             </span>
           </button>
+
           <button className="btn">
             <i className="fa fa-bell" />
           </button>

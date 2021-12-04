@@ -1,17 +1,21 @@
 import React, { createRef, Component } from 'react'
 
-
 import ComponentToPrint from './paper'
-
 
 import ReactToPrint from 'react-to-print'
 
-
 class Report extends Component {
+  btnPrint = createRef()
 
-    btnPrint = createRef()
+  render() {
+    return <>Test87654</>
+  }
+}
 
-    render() {
+export default Report
+
+/*
+ render() {
         return (
             <div className="reportContainer">
                 <div>
@@ -36,7 +40,5 @@ class Report extends Component {
                 </div>
             </div>
         )
-    }
-}
-
-export default Report
+    } 
+*/

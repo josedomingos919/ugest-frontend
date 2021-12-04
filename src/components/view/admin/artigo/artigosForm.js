@@ -5,30 +5,27 @@ import { Input, Select, Button, InputFile } from '../../../layout/form'
 import { UseUgest } from '../../context'
 
 import Api from '../../../../api'
+import { getArtigo, getState } from '../../../../api/service'
 
 const Form = () => {
-  const { multUso, action, setAction } = UseUgest()
+  const { action, setAction } = UseUgest()
   const [estado, setEstado] = useState([])
   const [tipoArtigo, setTipoArtigo] = useState()
 
-  useEffect(() => {
-    setEstado(
-      multUso.estado.map(({ est_id, est_designacao }) => {
-        return { value: est_id, label: est_designacao }
-      }),
-    )
-  }, [multUso])
+  const initial = async () => {
+    const state = await getState()
+    const artigo = await getArtigo()
 
-  useEffect(() => {
-    Api.get(`/tipoartigo`).then((e) => {
-      const data = e?.data?.data || []
-
-      setTipoArtigo(
-        data.map(({ tip_id, tip_designacao }) => {
-          return { value: tip_id, label: tip_designacao }
-        }),
-      )
+    setTipoArtigo(artigo)
+    setEstado(state)
+    setAction({
+      toSave: {},
+      toEdit: {},
     })
+  }
+
+  useEffect(() => {
+    initial()
   }, [])
 
   return (
@@ -60,7 +57,7 @@ const Form = () => {
                   ...action,
                   toSave: {
                     ...action.toSave,
-                    art_designacao: e.target.value,
+                    art_designacao: e?.target?.value,
                   },
                 })
               }
@@ -68,14 +65,14 @@ const Form = () => {
             <Input
               icon="fas fa-credit-card"
               label="Preço unitário"
-              type="text"
+              type="number"
               placeholder="valor"
               onChange={(e) =>
                 setAction({
                   ...action,
                   toSave: {
                     ...action.toSave,
-                    art_preco: e.target.value,
+                    art_preco: +e?.target?.value,
                   },
                 })
               }
@@ -88,7 +85,7 @@ const Form = () => {
                   ...action,
                   toSave: {
                     ...action.toSave,
-                    art_estado_id: e.target.value,
+                    art_estado_id: e?.target?.value,
                   },
                 })
               }
@@ -101,7 +98,7 @@ const Form = () => {
                   ...action,
                   toSave: {
                     ...action.toSave,
-                    art_tipoArtigo_id: e.target.value,
+                    art_tipoArtigo_id: e?.target?.value,
                   },
                 })
               }
@@ -118,7 +115,7 @@ const Form = () => {
                   ...action,
                   toSave: {
                     ...action.toSave,
-                    art_stock_real: e.target.value,
+                    art_stock_real: +e?.target?.value,
                   },
                 })
               }
@@ -135,7 +132,7 @@ const Form = () => {
                   ...action,
                   toSave: {
                     ...action.toSave,
-                    art_stock_minimo: e.target.value,
+                    art_stock_minimo: +e?.target?.value,
                   },
                 })
               }
@@ -170,10 +167,12 @@ const Form = () => {
                 let data = new FormData()
 
                 Object.keys(action.toSave).forEach((key) => {
-                  data.set(key, action.toSave[key])
+                  data.append(key, action.toSave[key])
                 })
+
+                console.log('data=> ', data)
                 const res = await Api.post(`/artigo`, data)
-                console.log('Artigos=>', res)
+                console.log('Artigos=> ', res)
               }}
             >
               Salvar

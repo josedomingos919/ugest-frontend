@@ -42,7 +42,7 @@ export const UgestProvider = ({ children }) => {
 
   const [print, setPrint] = useState()
 
-  const [multUso, setMulUso] = useState()
+  const [multUso, setMulUso] = useState([])
 
   const [menu, setMenu] = useState([
     {
@@ -321,33 +321,28 @@ export const UgestProvider = ({ children }) => {
     },
   ])
 
-  useEffect(() => {
-    ;(async () => {
-      const res = await Api.get(`/estado/0`)
-      setMulUso({
-        estado: res.data,
-      })
-    })()
-  }, [])
+  /*
 
   useEffect(() => {
     localStorage.setItem('UserPreference', JSON.stringify(preference))
   }, [preference])
 
+  /*
   useEffect(() => {
-    setMenu(
-      menu.map((item) => {
-        return item?.name !== 'Arquivo'
-          ? item
-          : {
-              name: 'Arquivo',
-              InMenu: false,
-              route: 'arquivo',
-              jsx: () => <Report children={print} />,
-            }
-      }),
-    )
-  }, [print, setMenu, menu])
+    if (print)
+      setMenu(
+        menu?.map((item) => {
+          return item?.name !== 'Arquivo'
+            ? item
+            : {
+                name: 'Arquivo',
+                InMenu: false,
+                route: 'arquivo',
+                jsx: () => <Report children={print} />,
+              }
+        }),
+      )
+  }, [print])*/
 
   return (
     <UgestContext.Provider
@@ -377,9 +372,7 @@ export const UgestProvider = ({ children }) => {
 
 export const UseUgest = () => {
   const context = useContext(UgestContext)
-
-  if (!context) throw new Error('UseUgest munst be used within UgestProvider.')
-
+  console.log('context=> ', context)
   const {
     navigation,
     setNavigation,
@@ -397,7 +390,7 @@ export const UseUgest = () => {
     setLoader,
     print,
     setPrint,
-  } = context
+  } = context || {}
 
   return {
     navigation,
