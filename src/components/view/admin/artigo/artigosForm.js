@@ -8,7 +8,7 @@ import Api from '../../../../api'
 import { getArtigo, getState } from '../../../../api/service'
 
 const Form = () => {
-  const { action, setAction } = UseUgest()
+  const { action = {}, setAction } = UseUgest()
   const [estado, setEstado] = useState([])
   const [tipoArtigo, setTipoArtigo] = useState()
 
@@ -30,7 +30,6 @@ const Form = () => {
 
   return (
     <>
-      {/*<Alert message="Cadastrado com sucesso" show={true} type="error" />*/}
       <div className="productContentMain">
         <div>
           <InputFile
@@ -167,12 +166,19 @@ const Form = () => {
                 let data = new FormData()
 
                 Object.keys(action.toSave).forEach((key) => {
-                  data.append(key, action.toSave[key])
+                  data.set(key, action.toSave[key])
+                  console.log('key =>', action.toSave[key])
                 })
 
-                console.log('data=> ', data)
                 const res = await Api.post(`/artigo`, data)
-                console.log('Artigos=> ', res)
+
+                if (res.status == 200) {
+                  alert('Cadastrado com sucesso!')
+                  initial()
+                  window.location.href = 'http://localhost:3000/faturar'
+                } else {
+                  alert('Falha ao cadastra!')
+                }
               }}
             >
               Salvar
