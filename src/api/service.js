@@ -29,3 +29,18 @@ export const getArtigo = async () => {
     return []
   }
 }
+
+export const getPapel = async () => {
+  try {
+    let res = await Api.get(`/papel`)
+
+    return (
+      res?.data?.data?.map(({ pap_id, pap_designacao }) => ({
+        value: pap_id,
+        label: pap_designacao,
+      })) || []
+    )
+  } catch (e) {
+    return []
+  }
+}

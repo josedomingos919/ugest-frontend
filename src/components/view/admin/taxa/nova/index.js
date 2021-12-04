@@ -1,40 +1,25 @@
 import React, { useState, useEffect } from 'react'
-
 import { Input, Select, Button, TextArea } from '../../../../layout/form'
-
 import { UseUgest } from '../../../context'
-
+import { getState } from '../../../../../api/service'
 import Api from '../../../../../api'
 
 export default function NovaTaxa() {
-  const { action, multUso, setAction } = UseUgest()
-
+  const { action, setAction } = UseUgest()
   const [estado, setEstado] = useState([])
 
-  const [papel, setPapel] = useState([])
+  const initial = async () => {
+    setEstado(await getState())
+
+    setAction({
+      toSave: {},
+      toEdit: {},
+    })
+  }
 
   useEffect(() => {
-    Array.isArray(multUso?.estado) &&
-      setEstado(
-        multUso.estado.map(({ est_id, est_designacao }) => {
-          return { value: est_id, label: est_designacao }
-        }),
-      )
-  }, [multUso])
-
-  useEffect(() => {
-    ;(async () => {
-      const response = await Api.get(`/papel`)
-      const data = response?.data?.data || []
-
-      setPapel(
-        data.map(({ pap_id, pap_designacao }) => {
-          return { value: pap_id, label: pap_designacao }
-        }),
-      )
-      console.log(papel)
-    })()
-  }, [papel])
+    initial()
+  }, [])
 
   return (
     <div
@@ -63,7 +48,7 @@ export default function NovaTaxa() {
             data={[
               {
                 label: 'Imposto',
-                value: 'inposto',
+                value: 'imposto',
               },
               {
                 label: 'Encargo',
@@ -154,29 +139,10 @@ export default function NovaTaxa() {
         </Button>
         <Button
           onClick={async () => {
-            console.log(action.toSave)
-
+            console.log('data=> ', action.toSave)
             Api.post(`/taxa`, action.toSave).then((e) => {
-              console.log(e)
-
-              setAction({
-                ...action,
-                toSave: {},
-              })
+              initial()
             })
-
-            /* if (action.toSave.art_stock_minimo >= action.toSave.art_stock_real) {
-                            alert('O stock minimo deve ser menor que so stock real')
-                            return
-                        }
-                        
-                        let data = new FormData()
-
-                        
-                        Object.keys(action.toSave).map((key) => {
-                            data.set(key, action.toSave[key])
-                        });
-                                        const res = await Api.post( `/artigo`,data);*/
           }}
         >
           Salvar

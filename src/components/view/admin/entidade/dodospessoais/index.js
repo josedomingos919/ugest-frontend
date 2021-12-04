@@ -1,37 +1,21 @@
 import React, { useState, useEffect } from 'react'
 
-import { Input, Select } from '../../../../layout/form'
-
 import { UseUgest } from '../../../context'
-
-import Api from '../../../../../api'
+import { Input, Select } from '../../../../layout/form'
+import { getPapel, getState } from '../../../../../api/service'
 
 export default function DadosPessoais() {
-  const { action, multUso, setAction } = UseUgest()
-
+  const { action, setAction } = UseUgest()
   const [estado, setEstado] = useState([])
-
   const [papel, setPapel] = useState([])
 
-  useEffect(() => {
-    setEstado(
-      multUso.estado.map(({ est_id, est_designacao }) => {
-        return { value: est_id, label: est_designacao }
-      }),
-    )
-  }, [multUso])
+  const initial = async () => {
+    setEstado(await getState())
+    setPapel(await getPapel())
+  }
 
   useEffect(() => {
-    ;(async () => {
-      const response = await Api.get(`/papel`)
-      const data = response?.data?.data || []
-
-      setPapel(
-        data.map(({ pap_id, pap_designacao }) => {
-          return { value: pap_id, label: pap_designacao }
-        }),
-      )
-    })()
+    initial()
   }, [])
 
   return (
