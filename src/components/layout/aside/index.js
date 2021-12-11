@@ -5,9 +5,10 @@ import Avatar from '../../../assets/images/avatar.png'
 import { Link } from 'react-router-dom'
 
 import { UseUgest } from '../../view/context'
+import { getUserSession } from '../../../api/service'
 
 export default function Aside() {
-  const { menu, navigation, setNavigation } = UseUgest()
+  const { menu, navigation, setNavigation, userData } = UseUgest()
 
   const [navToggle, setNavToggle] = useState(true)
   const [menuOn, setMenuOn] = useState(0)
@@ -15,8 +16,10 @@ export default function Aside() {
   const [submenu, setSubmenu] = useState([])
   const [submenuActive, setSubmenuActive] = useState(0)
 
-  const { pessoa, acesso } = JSON.parse(sessionStorage.getItem('authUser'))
+  window.teste = getUserSession
+  const { pessoa, acesso } = userData
 
+  console.log('userData=>', userData)
   console.log(pessoa, acesso)
 
   return (
@@ -65,12 +68,21 @@ export default function Aside() {
       <div>
         <ul>
           {menu.map(
-            ({ name, InMenu, route: father_route, icon, childrean }, index) => {
+            (
+              { name, InMenu, route: father_route, icon, childrean, onClick },
+              index,
+            ) => {
               return (
                 InMenu !== false && (
                   <li
                     onClick={(prev) => {
                       prev.stopPropagation()
+
+                      if (onClick) {
+                        onClick()
+                        return
+                      }
+
                       setMenuOn(index)
 
                       if (childrean) {

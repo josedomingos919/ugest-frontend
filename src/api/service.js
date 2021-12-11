@@ -1,3 +1,4 @@
+import { isEmpty } from '../util/functions'
 import Api from './index'
 
 export const getState = async () => {
@@ -43,4 +44,40 @@ export const getPapel = async () => {
   } catch (e) {
     return []
   }
+}
+
+export const saveUserSession = async (data = {}) => {
+  try {
+    localStorage.setItem('34hdfg6', btoa(JSON.stringify(data)))
+    return true
+  } catch (err) {
+    console.log(err)
+    return false
+  }
+}
+
+export const getUserSession = async () => {
+  try {
+    const data = atob(localStorage.getItem('34hdfg6') || '')
+    return (await JSON.parse(data)) || {}
+  } catch (err) {
+    console.log(err)
+    return {}
+  }
+}
+
+export const isLogged = () => {
+  return !isEmpty(localStorage.getItem('34hdfg6'))
+}
+
+export const logOut = () => {
+  localStorage.clear()
+  window.location.replace(window.location.origin + '/')
+}
+window.logOut = logOut
+
+export const navigation = {
+  navigate(path) {
+    window.location.href = window.location.href + path
+  },
 }

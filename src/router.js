@@ -58,10 +58,11 @@ function Admin() {
               )}
             <Loader {...loader} />
             <main className="mainContent">
-              {routes.map(({ route, jsx }, index) => {
+              {routes.map(({ route, jsx, onClick }, index) => {
                 return (
                   jsx && (
                     <Route
+                      onClick={onClick}
                       key={index}
                       path={`/${route}`}
                       exact

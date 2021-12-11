@@ -17,10 +17,14 @@ import Nota from '../../view/admin/nota'
 import Shopping from '../admin/shopping'
 
 import Formapagamento from '../admin/formapagamento'
+import { useEffect } from 'react/cjs/react.development'
+import { getUserSession, logOut } from '../../../api/service'
+import { isEmpty } from '../../../util/functions'
 
 const UgestContext = createContext()
 
 export const UgestProvider = ({ children }) => {
+  const [userData, setUserData] = useState({})
   const [navigation, setNavigation] = useState({})
   const [preference, setPreference] = useState({
     ...(JSON.parse(localStorage.getItem('UserPreference')) || { mode: true }),
@@ -297,8 +301,11 @@ export const UgestProvider = ({ children }) => {
     },
     {
       name: 'Sair',
-      route: 'sair',
+      route: '',
       icon: 'fas fa-sign-out-alt',
+      onClick: () => {
+        logOut()
+      },
     },
     {
       name: 'Lista de compras',
@@ -319,6 +326,14 @@ export const UgestProvider = ({ children }) => {
       jsx: () => <Report children={print} />,
     },
   ])
+
+  useEffect(() => {
+    ;(async () => {
+      setUserData(await getUserSession())
+    })()
+  }, [])
+
+  const isLogged = () => !isEmpty(userData)
 
   /*
 
@@ -346,6 +361,9 @@ export const UgestProvider = ({ children }) => {
   return (
     <UgestContext.Provider
       value={{
+        isLogged,
+        userData,
+        setUserData,
         navigation,
         setNavigation,
         preference,
@@ -371,8 +389,9 @@ export const UgestProvider = ({ children }) => {
 
 export const UseUgest = () => {
   const context = useContext(UgestContext)
-  console.log('context=> ', context)
+
   const {
+    isLogged,
     navigation,
     setNavigation,
     preference,
@@ -389,9 +408,14 @@ export const UseUgest = () => {
     setLoader,
     print,
     setPrint,
+    userData,
+    setUserData,
   } = context || {}
 
   return {
+    isLogged,
+    userData,
+    setUserData,
     navigation,
     setNavigation,
     preference,

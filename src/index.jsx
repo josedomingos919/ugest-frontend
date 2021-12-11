@@ -6,30 +6,36 @@ import Routes from './router'
 import { UgestProvider } from './components/view/context'
 import './index.css'
 import './styles/faturacao.css'
+import { isLogged } from './api/service'
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min'
 
 const App = () => {
-  //const [ user, setUser ] = useState()
-
   return (
     <BrowserRouter>
       <Route
         path="/"
         exact
-        component={() => (
-          <Login
-            userData={(e) => {
-              if (!e) return
-              setTimeout(() => {
-                window.location.href = window.location.href + 'faturar'
-              }, 2000)
-            }}
-          />
-        )}
+        component={() => {
+          if (isLogged()) return <Redirect to="/faturar" />
+
+          return (
+            <Login
+              userData={(e) => {
+                if (!e) return
+                setTimeout(() => {
+                  window.location.href = window.location.href + 'faturar'
+                }, 2000)
+              }}
+            />
+          )
+        }}
       />
       <Route
         path="/faturar"
         exact
         component={() => {
+          if (!isLogged()) return <Redirect to="/" />
+
           return (
             <UgestProvider>
               <Routes />

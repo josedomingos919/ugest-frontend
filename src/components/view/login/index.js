@@ -9,8 +9,12 @@ import { Input, Button } from '../../layout/form'
 import Loader from '../../layout/loader'
 import Alert from '../../layout/alert'
 import axios from 'axios'
+import { navigation, saveUserSession } from '../../../api/service'
+import { UseUgest } from '../context'
+import { route } from '../../../api/consts'
 
-export default function Login({ userData }) {
+export default function Login() {
+  const { setUserData } = UseUgest()
   const [loader, setLoader] = useState()
 
   const [alert, setAlert] = useState({
@@ -80,10 +84,21 @@ export default function Login({ userData }) {
                           show: true,
                         })
 
-                        console.log('000', data)
+                        if (saveUserSession(data)) {
+                          setTimeout(() => {
+                            navigation.navigate(route.names.faturar)
+                          }, 2000)
+                        } else {
+                          setAlert({
+                            ...alert,
+                            type: 'error',
+                            show: true,
+                            message:
+                              'Não foi possível salvar a seção do usuário!',
+                          })
 
-                        sessionStorage.setItem('authUser', JSON.stringify(data))
-                        userData(data)
+                          setUserData(data)
+                        }
                       })
                       .catch((error) => {
                         console.log('error', error)
@@ -93,7 +108,6 @@ export default function Login({ userData }) {
                           show: true,
                           message: 'Email ou senha incorrecta',
                         })
-                        userData(false)
                       })
                       .finally(() => {
                         setLoader({
