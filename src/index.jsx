@@ -43,6 +43,9 @@ const App = () => {
           )
         }}
       />
+      <Route>
+        <Redirect to="/faturar" />
+      </Route>
     </BrowserRouter>
   )
 }

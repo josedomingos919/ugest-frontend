@@ -1,4 +1,5 @@
 import { isEmpty } from '../util/functions'
+import { STORAGE_KEY } from './consts'
 import Api from './index'
 
 export const getState = async () => {
@@ -48,7 +49,7 @@ export const getPapel = async () => {
 
 export const saveUserSession = async (data = {}) => {
   try {
-    localStorage.setItem('34hdfg6', btoa(JSON.stringify(data)))
+    localStorage.setItem(STORAGE_KEY, btoa(JSON.stringify(data)))
     return true
   } catch (err) {
     console.log(err)
@@ -58,8 +59,7 @@ export const saveUserSession = async (data = {}) => {
 
 export const getUserSession = async () => {
   try {
-    const data = atob(localStorage.getItem('34hdfg6') || '')
-    return (await JSON.parse(data)) || {}
+    return JSON.parse(atob(localStorage?.getItem(STORAGE_KEY) ?? '') || '{}')
   } catch (err) {
     console.log(err)
     return {}
@@ -67,11 +67,11 @@ export const getUserSession = async () => {
 }
 
 export const isLogged = () => {
-  return !isEmpty(localStorage.getItem('34hdfg6'))
+  return !isEmpty(localStorage.getItem(STORAGE_KEY))
 }
 
 export const logOut = () => {
-  localStorage.clear()
+  localStorage.removeItem(STORAGE_KEY)
   window.location.replace(window.location.origin + '/')
 }
 window.logOut = logOut
