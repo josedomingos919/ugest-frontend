@@ -5,9 +5,10 @@ import { Input, Select, Button } from '../../../../layout/form'
 import { UseUgest } from '../../../context'
 
 import Api from '../../../../../api'
+import { getState } from '../../../../../api/service'
 
 export default function NovaTaxa() {
-  const { action, multUso, setAction } = UseUgest()
+  const { action, setAction } = UseUgest()
 
   const [estado, setEstado] = useState([])
 
@@ -17,14 +18,13 @@ export default function NovaTaxa() {
 
   const [artigo, setArtigo] = useState()
 
+  const initial = async () => {
+    setEstado(await getState())
+  }
+
   useEffect(() => {
-    Array.isArray(multUso?.estado) &&
-      setEstado(
-        multUso.estado.map(({ est_id, est_designacao }) => {
-          return { value: est_id, label: est_designacao }
-        }),
-      )
-  }, [multUso])
+    initial()
+  }, [])
 
   useEffect(() => {
     Api.get(`/taxa`).then((e) => {

@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
-import Api from '../../../api'
 import Faturar from '../admin/faturar'
 import Painel from '../admin/painel'
 import Other from '../admin/other'

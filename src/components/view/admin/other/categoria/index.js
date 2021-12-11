@@ -5,22 +5,20 @@ import { Input, Select } from '../../../../layout/form'
 import { UseUgest } from '../../../context'
 
 import Api from '../../../../../api'
+import { getState } from '../../../../../api/service'
 
 export default function Categoria() {
-  const { multUso, action, setAction } = UseUgest()
-
+  const { action, setAction } = UseUgest()
   const [estado, setEstado] = useState([])
-
   const [subCategoria, setSubCategoria] = useState([])
 
+  const initial = async () => {
+    setEstado(await getState())
+  }
+
   useEffect(() => {
-    Array.isArray(multUso?.estado) &&
-      setEstado(
-        multUso?.estado?.map(({ est_id, est_designacao }) => {
-          return { value: est_id, label: est_designacao }
-        }),
-      )
-  }, [multUso])
+    initial()
+  }, [])
 
   useEffect(() => {
     ;(async () => {

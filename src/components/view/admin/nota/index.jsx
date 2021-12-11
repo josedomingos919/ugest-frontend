@@ -46,10 +46,9 @@ function Nota() {
       }
     })
 
-    console.log(artigo_)
     setArtigo(artigo)
     setData(artigoTable)
-  }, [faturaInfo, artigo_])
+  }, [faturaInfo])
 
   return (
     <div className="notaContainer">
