@@ -23,7 +23,8 @@ export default function Artigo(props) {
 
   useEffect(() => {
     ;(async () => {
-      const { data } = await Api.get(`/${menu.toLocaleLowerCase()}`)
+      const { data = [] } =
+        (await Api.get(`/${menu.toLocaleLowerCase()}`)) || {}
 
       console.log('data', data)
 
